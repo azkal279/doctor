@@ -10,11 +10,11 @@ import background2x from "../../models/examplePass.pass/background@2x.png";
 
 export interface Env {
 	/**
-	 * "var" (instead of let and cost) is required here
+	 * "const" (instead of let and cost) is required here
 	 * to make typescript mark that these global variables
 	 * are available also in globalThis.
 	 *
-	 * These are secrets we have defined through `wrangler secret put <var name>`.
+	 * These are secrets we have defined through `wrangler secret put <const name>`.
 	 * @see https://developers.cloudflare.com/workers/platform/environment-variables
 	 */
 
