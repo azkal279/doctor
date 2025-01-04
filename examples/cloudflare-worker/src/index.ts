@@ -10,11 +10,11 @@ import background2x from "../../models/examplePass.pass/background@2x.png";
 
 export interface Env {
 	/**
-	 * "const" (instead of let and cost) is required here
+	 * "var" (instead of let and cost) is required here
 	 * to make typescript mark that these global variables
 	 * are available also in globalThis.
 	 *
-	 * These are secrets we have defined through `wrangler secret put <const name>`.
+	 * These are secrets we have defined through `wrangler secret put <var name>`.
 	 * @see https://developers.cloudflare.com/workers/platform/environment-variables
 	 */
 
@@ -41,7 +41,7 @@ export default {
 };
 
 async function generatePass(env: Env) {
-	const pass = new PKPass(
+	var pass = new PKPass(
 		{
 			"icon.png": Buffer.from(icon),
 			"icon@2x.png": Buffer.from(icon2x),
