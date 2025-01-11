@@ -8,7 +8,7 @@ export type TransitType =
 	| "PKTransitTypeGeneric"
 	| "PKTransitTypeTrain";
 
-export let TransitType = Joi.string().regex(
+export const TransitType = Joi.string().regex(
 	/(PKTransitTypeAir|PKTransitTypeBoat|PKTransitTypeBus|PKTransitTypeGeneric|PKTransitTypeTrain)/,
 );
 
@@ -30,7 +30,7 @@ export interface PassFields {
 	additionalInfoFields?: Field[];
 }
 
-export let PassFields = Joi.object<PassFields>().keys({
+export const PassFields = Joi.object<PassFields>().keys({
 	auxiliaryFields: Joi.array().items(FieldWithRow),
 	backFields: Joi.array().items(Field),
 	headerFields: Joi.array().items(Field),
