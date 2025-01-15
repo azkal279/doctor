@@ -5,7 +5,7 @@
  */
 
 import express from "express";
-export let app = express();
+export const app = express();
 
 app.use(express.json());
 
