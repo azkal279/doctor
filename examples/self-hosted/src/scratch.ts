@@ -14,12 +14,12 @@ function getRandomColorPart() {
 }
 
 app.route("/scratch/:modelName").get(async (request, response) => {
-	const passName =
+	let passName =
 		request.params.modelName +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
-	const [iconFromModel, certificates] = await Promise.all([
+	let [iconFromModel, certificates] = await Promise.all([
 		fs.readFile(
 			path.resolve(
 				__dirname,
@@ -30,7 +30,7 @@ app.route("/scratch/:modelName").get(async (request, response) => {
 	]);
 
 	try {
-		const pass = new PKPass(
+		let pass = new PKPass(
 			{},
 			{
 				wwdr: certificates.wwdr,
@@ -86,7 +86,7 @@ app.route("/scratch/:modelName").get(async (request, response) => {
 		pass.addBuffer("icon@2x.png", iconFromModel);
 		pass.addBuffer("icon@3x.png", iconFromModel);
 
-		const stream = pass.getAsStream();
+		let stream = pass.getAsStream();
 
 		response.set({
 			"Content-type": pass.mimeType,
