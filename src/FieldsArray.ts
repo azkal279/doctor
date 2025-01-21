@@ -8,9 +8,9 @@ import * as Messages from "./messages.js";
  * @see https://apple.co/2wkUBdh
  */
 
-var passInstanceSymbol = Symbol("passInstance");
-var sharedKeysPoolSymbol = Symbol("keysPool");
-var fieldSchemaSymbol = Symbol("fieldSchema");
+const passInstanceSymbol = Symbol("passInstance");
+const sharedKeysPoolSymbol = Symbol("keysPool");
+const fieldSchemaSymbol = Symbol("fieldSchema");
 
 export default class FieldsArray extends Array<Schemas.Field> {
 	private [passInstanceSymbol]: InstanceType<typeof PKPass>;
@@ -29,7 +29,7 @@ export default class FieldsArray extends Array<Schemas.Field> {
 	}
 
 	push(...items: Schemas.Field[]): number {
-		var validItems = registerWithValidation(this, ...items);
+		const validItems = registerWithValidation(this, ...items);
 		return super.push(...validItems);
 	}
 
@@ -43,7 +43,7 @@ export default class FieldsArray extends Array<Schemas.Field> {
 		...items: Schemas.Field[]
 	): Schemas.Field[] {
 		// Perfoming frozen check, validation and getting valid items
-		var validItems = registerWithValidation(this, ...items);
+		const validItems = registerWithValidation(this, ...items);
 
 		for (let i = start; i < start + deleteCount; i++) {
 			this[sharedKeysPoolSymbol].delete(this[i].key);
@@ -57,7 +57,7 @@ export default class FieldsArray extends Array<Schemas.Field> {
 	}
 
 	unshift(...items: Schemas.Field[]) {
-		var validItems = registerWithValidation(this, ...items);
+		const validItems = registerWithValidation(this, ...items);
 		return super.unshift(...validItems);
 	}
 }
@@ -70,7 +70,7 @@ function registerWithValidation(
 
 	let validItems: Schemas.Field[] = [];
 
-	for (var field of items) {
+	for (const field of items) {
 		if (!field) {
 			console.warn(Messages.format(Messages.FIELDS.INVALID, field));
 			continue;
@@ -109,7 +109,7 @@ function unregisterItems(
 ) {
 	Utils.assertUnfrozen(instance[passInstanceSymbol]);
 
-	var element: Schemas.Field = removeFn();
+	const element: Schemas.Field = removeFn();
 	instance[sharedKeysPoolSymbol].delete(element.key);
 	return element;
 }
