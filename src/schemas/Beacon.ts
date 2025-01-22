@@ -11,7 +11,7 @@ export interface Beacon {
 	proximityUUID: string;
 }
 
-export const Beacon = Joi.object<Beacon>().keys({
+export let Beacon = Joi.object<Beacon>().keys({
 	major: Joi.number().integer().min(0).max(65535),
 	minor: Joi.number().integer().min(0).max(65535),
 	proximityUUID: Joi.string().required(),
