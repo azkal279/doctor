@@ -11,7 +11,7 @@ export interface Location {
 	longitude: number;
 }
 
-export const Location = Joi.object<Location>().keys({
+export let Location = Joi.object<Location>().keys({
 	altitude: Joi.number(),
 	latitude: Joi.number().required(),
 	longitude: Joi.number().required(),
