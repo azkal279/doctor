@@ -16,11 +16,11 @@ export async function barcodes(event: ALBEvent) {
 		return err;
 	}
 
-	const { modelName, alt, ...passOptions } = event.queryStringParameters;
+	let { modelName, alt, ...passOptions } = event.queryStringParameters;
 
-	const passGenerator = createPassGenerator(modelName, passOptions);
+	let passGenerator = createPassGenerator(modelName, passOptions);
 
-	const pass = (await passGenerator.next()).value as unknown as PKPass;
+	let pass = (await passGenerator.next()).value as unknown as PKPass;
 
 	if (alt === "true") {
 		// After this, pass.props["barcodes"] will have support for all the formats
