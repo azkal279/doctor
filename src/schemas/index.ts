@@ -24,7 +24,7 @@ import { RGB_HEX_COLOR_REGEX, URL_REGEX } from "./regexps.js";
 
 export type PreferredStyleSchemes = ("posterEventTicket" | "eventTicket")[];
 
-export let PreferredStyleSchemes = Joi.array().items(
+export const PreferredStyleSchemes = Joi.array().items(
 	"posterEventTicket",
 	"eventTicket",
 ) satisfies Joi.Schema<PreferredStyleSchemes>;
@@ -53,7 +53,7 @@ export interface RelevancyEntry {
 
 export type RelevantDate = RelevancyInterval | RelevancyEntry;
 
-export let RelevantDate = Joi.alternatives(
+export const RelevantDate = Joi.alternatives(
 	Joi.object<RelevancyInterval>().keys({
 		startDate: Joi.alternatives(
 			Joi.string().isoDate(),
@@ -401,7 +401,7 @@ export type PassColors = Pick<
 	"backgroundColor" | "foregroundColor" | "labelColor"
 >;
 
-export let PassPropsFromMethods = Joi.object<PassPropsFromMethods>({
+export const PassPropsFromMethods = Joi.object<PassPropsFromMethods>({
 	nfc: NFC,
 	beacons: Joi.array().items(Beacon),
 	barcodes: Joi.array().items(Barcode),
@@ -412,7 +412,7 @@ export let PassPropsFromMethods = Joi.object<PassPropsFromMethods>({
 	preferredStyleSchemes: PreferredStyleSchemes,
 });
 
-export let PassKindsProps = Joi.object<PassKindsProps>({
+export const PassKindsProps = Joi.object<PassKindsProps>({
 	coupon: PassFields.disallow("transitType"),
 	generic: PassFields.disallow("transitType"),
 	storeCard: PassFields.disallow("transitType"),
@@ -420,11 +420,11 @@ export let PassKindsProps = Joi.object<PassKindsProps>({
 	boardingPass: PassFields,
 });
 
-export let PassType = Joi.string().regex(
+export const PassType = Joi.string().regex(
 	/(boardingPass|coupon|eventTicket|storeCard|generic)/,
 );
 
-export let OverridablePassProps = Joi.object<OverridablePassProps>({
+export const OverridablePassProps = Joi.object<OverridablePassProps>({
 	formatVersion: Joi.number().default(1),
 	semantics: Semantics,
 	voided: Joi.boolean(),
@@ -690,7 +690,7 @@ export let OverridablePassProps = Joi.object<OverridablePassProps>({
 	auxiliaryStoreIdentifiers: Joi.array().items(Joi.number()),
 }).with("webServiceURL", "authenticationToken");
 
-export let PassProps = Joi.object<
+export const PassProps = Joi.object<
 	OverridablePassProps & PassKindsProps & PassPropsFromMethods
 >()
 	.concat(OverridablePassProps)
@@ -702,7 +702,7 @@ export interface Template {
 	certificates?: CertificatesSchema;
 }
 
-export let Template = Joi.object<Template>({
+export const Template = Joi.object<Template>({
 	model: Joi.string().required(),
 	certificates: Joi.object().required(),
 });
@@ -722,7 +722,7 @@ export function assertValidity<T>(
 	data: T,
 	customErrorMessage?: string,
 ): void {
-	let validation = schema.validate(data);
+	const validation = schema.validate(data);
 
 	if (validation.error) {
 		if (customErrorMessage) {
@@ -753,7 +753,7 @@ export function validate<T extends Object>(
 	schema: Joi.Schema<T>,
 	options: T,
 ): T {
-	let validationResult = schema.validate(options, {
+	const validationResult = schema.validate(options, {
 		stripUnknown: true,
 		abortEarly: true,
 	});
