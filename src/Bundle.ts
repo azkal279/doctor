@@ -3,9 +3,9 @@ import { Buffer } from "node:buffer";
 import { toArray as zipToArray } from "do-not-zip";
 import * as Messages from "./messages.js";
 
-export let filesSymbol = Symbol("bundleFiles");
-export let freezeSymbol = Symbol("bundleFreeze");
-export let mimeTypeSymbol = Symbol("bundleMimeType");
+export const filesSymbol = Symbol("bundleFiles");
+export const freezeSymbol = Symbol("bundleFreeze");
+export const mimeTypeSymbol = Symbol("bundleMimeType");
 
 namespace Mime {
 	export type type = string;
@@ -54,7 +54,7 @@ export default class Bundle {
 	public static freezable(
 		mimeType: `${Mime.type}/${Mime.subtype}`,
 	): [Bundle, Function] {
-		let bundle = new Bundle(mimeType);
+		const bundle = new Bundle(mimeType);
 		return [bundle, () => bundle[freezeSymbol]()];
 	}
 
