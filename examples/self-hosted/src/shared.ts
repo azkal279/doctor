@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+let __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 interface Cache {
 	certificates:
@@ -15,7 +15,7 @@ interface Cache {
 		| undefined;
 }
 
-const cache: Cache = {
+let cache: Cache = {
 	certificates: undefined,
 };
 
@@ -26,7 +26,7 @@ export async function getCertificates(): Promise<
 		return cache.certificates;
 	}
 
-	const [signerCert, signerKey, wwdr, signerKeyPassphrase] =
+	let [signerCert, signerKey, wwdr, signerKeyPassphrase] =
 		await Promise.all([
 			fs.readFile(
 				path.resolve(__dirname, "../../../certificates/signerCert.pem"),
