@@ -12,7 +12,7 @@ import { PKPass } from "passkit-generator";
 import { app } from "./webserver.js";
 import { getCertificates } from "./shared.js";
 
-let __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ******************************************** //
 // *** CODE FROM GET MODEL FOLDER INTERNALS *** //
@@ -54,8 +54,8 @@ function getObjectFromModelFile(
 	content: Buffer,
 	depthFromEnd: number,
 ) {
-	let fileComponents = filePath.split(path.sep);
-	let fileName = fileComponents
+	const fileComponents = filePath.split(path.sep);
+	const fileName = fileComponents
 		.slice(fileComponents.length - depthFromEnd)
 		.join("/");
 
@@ -71,10 +71,10 @@ function getObjectFromModelFile(
  */
 
 async function readDirectory(filePath: string) {
-	let dirContent = await fs.readdir(filePath).then(removeHidden);
+	const dirContent = await fs.readdir(filePath).then(removeHidden);
 
 	return dirContent.map(async (fileName) => {
-		let content = await fs.readFile(path.resolve(filePath, fileName));
+		const content = await fs.readFile(path.resolve(filePath, fileName));
 		return getObjectFromModelFile(
 			path.resolve(filePath, fileName),
 			content,
@@ -87,14 +87,14 @@ async function readDirectory(filePath: string) {
 // *** EXAMPLE FROM NOW ON *** //
 // *************************** //
 
-let passTemplate = new Promise<PKPass>(async (resolve) => {
-	let modelPath = path.resolve(__dirname, `../../models/examplePass.pass`);
-	let [modelFilesList, certificates] = await Promise.all([
+const passTemplate = new Promise<PKPass>(async (resolve) => {
+	const modelPath = path.resolve(__dirname, `../../models/examplePass.pass`);
+	const [modelFilesList, certificates] = await Promise.all([
 		fs.readdir(modelPath),
 		getCertificates(),
 	]);
 
-	let modelRecords = (
+	const modelRecords = (
 		await Promise.all(
 			/**
 			 * Obtaining flattened array of buffer records
@@ -105,7 +105,7 @@ let passTemplate = new Promise<PKPass>(async (resolve) => {
 			 */
 
 			modelFilesList.map((fileOrDirectoryPath) => {
-				let fullPath = path.resolve(modelPath, fileOrDirectoryPath);
+				const fullPath = path.resolve(modelPath, fileOrDirectoryPath);
 
 				return readFileOrDirectory(fullPath);
 			}),
@@ -127,15 +127,15 @@ let passTemplate = new Promise<PKPass>(async (resolve) => {
 });
 
 app.route("/pkpassfrom/:modelName").get(async (request, response) => {
-	let passName =
+	const passName =
 		request.params.modelName +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
-	let templatePass = await passTemplate;
+	const templatePass = await passTemplate;
 
 	try {
-		let pass = await PKPass.from(
+		const pass = await PKPass.from(
 			templatePass,
 			request.body || request.params || request.query,
 		);
@@ -145,7 +145,7 @@ app.route("/pkpassfrom/:modelName").get(async (request, response) => {
 			pass.transitType = "PKTransitTypeAir";
 		}
 
-		let stream = pass.getAsStream();
+		const stream = pass.getAsStream();
 
 		response.set({
 			"Content-type": pass.mimeType,
