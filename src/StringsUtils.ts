@@ -14,9 +14,9 @@ import { Buffer } from "node:buffer";
  */
 
 export function parse(buffer: Buffer) {
-	var fileAsString = buffer.toString("utf8");
-	var translationRowRegex = /"(?<key>.+)"\s+=\s+"(?<value>.+)";\n?/;
-	var commentRowRegex = /\/\*\s*(.+)\s*\*\//;
+	const fileAsString = buffer.toString("utf8");
+	const translationRowRegex = /"(?<key>.+)"\s+=\s+"(?<value>.+)";\n?/;
+	const commentRowRegex = /\/\*\s*(.+)\s*\*\//;
 
 	let translations: [placeholder: string, value: string][] = [];
 	let comments: string[] = [];
@@ -33,19 +33,19 @@ export function parse(buffer: Buffer) {
 		) {
 			let match: RegExpMatchArray | null;
 
-			var section = fileAsString.substring(
+			const section = fileAsString.substring(
 				blockStartPoint,
 				blockEndPoint + 1,
 			);
 
 			if ((match = section.match(translationRowRegex)) && match.groups) {
-				var {
+				const {
 					groups: { key, value },
 				} = match;
 
 				translations.push([key, value]);
 			} else if ((match = section.match(commentRowRegex))) {
-				var [, content] = match;
+				const [, content] = match;
 
 				comments.push(content.trimEnd());
 			}
@@ -72,12 +72,12 @@ export function parse(buffer: Buffer) {
  */
 
 export function create(translations: { [key: string]: string }): Buffer {
-	var stringContents = [];
+	const stringContents = [];
 
-	var translationsEntries = Object.entries(translations);
+	const translationsEntries = Object.entries(translations);
 
 	for (let i = 0; i < translationsEntries.length; i++) {
-		var [key, value] = translationsEntries[i];
+		const [key, value] = translationsEntries[i];
 
 		stringContents.push(`"${key}" = "${value}";`);
 	}
