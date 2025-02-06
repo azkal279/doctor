@@ -7,11 +7,11 @@ import { createPassGenerator } from "../shared.js";
  */
 
 export async function fields(event: ALBEvent) {
-	let { modelName, ...passOptions } = event.queryStringParameters;
+	const { modelName, ...passOptions } = event.queryStringParameters;
 
-	let passGenerator = createPassGenerator("exampleBooking", passOptions);
+	const passGenerator = createPassGenerator("exampleBooking", passOptions);
 
-	let pass = (await passGenerator.next()).value as PKPass;
+	const pass = (await passGenerator.next()).value as PKPass;
 
 	pass.transitType = "PKTransitTypeAir";
 
