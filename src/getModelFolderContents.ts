@@ -16,11 +16,11 @@ export default async function getModelFolderContents(
 	model: string,
 ): Promise<{ [filePath: string]: Buffer }> {
 	try {
-		const modelPath = `${model}${(!path.extname(model) && ".pass") || ""}`;
-		const modelFilesList = await fs.readdir(modelPath);
+		let modelPath = `${model}${(!path.extname(model) && ".pass") || ""}`;
+		let modelFilesList = await fs.readdir(modelPath);
 
 		// No dot-starting files, manifest and signature and only files with an extension
-		const modelSuitableRootPaths = Utils.removeHidden(
+		let modelSuitableRootPaths = Utils.removeHidden(
 			modelFilesList,
 		).filter(
 			(f) =>
@@ -28,7 +28,7 @@ export default async function getModelFolderContents(
 				/.+$/.test(path.parse(f).ext),
 		);
 
-		const modelRecords = await Promise.all(
+		let modelRecords = await Promise.all(
 			modelSuitableRootPaths.map((fileOrDirectoryPath) =>
 				readFileOrDirectory(
 					path.resolve(modelPath, fileOrDirectoryPath),
@@ -94,7 +94,7 @@ function isFileReadingFailure(
 async function readFileOrDirectory(
 	filePath: string,
 ): Promise<[key: string, content: Buffer][]> {
-	const stats = await fs.lstat(filePath);
+	let stats = await fs.lstat(filePath);
 
 	if (stats.isDirectory()) {
 		return readFilesInDirectory(filePath);
@@ -114,7 +114,7 @@ async function readFileOrDirectory(
 async function readFilesInDirectory(
 	filePath: string,
 ): Promise<Awaited<ReturnType<typeof getFileContents>>[]> {
-	const dirContent = await fs.readdir(filePath).then(Utils.removeHidden);
+	let dirContent = await fs.readdir(filePath).then(Utils.removeHidden);
 
 	return Promise.all(
 		dirContent.map((fileName) =>
@@ -133,12 +133,12 @@ async function getFileContents(
 	filePath: string,
 	pathSlicesDepthFromEnd: number = 1,
 ): Promise<[key: string, content: Buffer]> {
-	const fileComponents = filePath.split(path.sep);
-	const fileName = fileComponents
+	let fileComponents = filePath.split(path.sep);
+	let fileName = fileComponents
 		.slice(fileComponents.length - pathSlicesDepthFromEnd)
 		.join("/");
 
-	const content = await fs.readFile(filePath);
+	let content = await fs.readFile(filePath);
 
 	return [fileName, content];
 }
