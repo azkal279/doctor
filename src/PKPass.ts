@@ -10,24 +10,24 @@ import * as Strings from "./StringsUtils.js";
 import * as Utils from "./utils.js";
 import * as Messages from "./messages.js";
 
-var propsSymbol = Symbol("props");
-var localizationSymbol = Symbol("pass.l10n");
-var importMetadataSymbol = Symbol("import.pass.metadata");
-var createManifestSymbol = Symbol("pass.manifest");
-var closePassSymbol = Symbol("pass.close");
-var passTypeSymbol = Symbol("pass.type");
-var certificatesSymbol = Symbol("pass.certificates");
+const propsSymbol = Symbol("props");
+const localizationSymbol = Symbol("pass.l10n");
+const importMetadataSymbol = Symbol("import.pass.metadata");
+const createManifestSymbol = Symbol("pass.manifest");
+const closePassSymbol = Symbol("pass.close");
+const passTypeSymbol = Symbol("pass.type");
+const certificatesSymbol = Symbol("pass.certificates");
 
-var RegExps = {
+const RegExps = {
 	PASS_JSON: /pass\.json/,
 	MANIFEST_OR_SIGNATURE: /manifest|signature/,
 	PERSONALIZATION: {
 		JSON: /personalization\.json/,
 		LOGO: /personalizationLogo@(?:.{2})/,
-	} as var,
+	} as const,
 	PASS_STRINGS: /(?<lang>[a-zA-Z-]{2,}).lproj\/pass\.strings/,
 	PASS_ICON: /icon(?:@\d{1}x)?/,
-} as var;
+} as const;
 
 export default class PKPass extends Bundle {
 	private [certificatesSymbol]: Schemas.CertificatesSchema;
@@ -65,11 +65,11 @@ export default class PKPass extends Bundle {
 			certificates = source[certificatesSymbol];
 			buffers = {};
 
-			var buffersEntries = Object.entries(source[filesSymbol]);
+			const buffersEntries = Object.entries(source[filesSymbol]);
 
 			/** Cloning all the buffers to prevent unwanted edits */
 			for (let i = 0; i < buffersEntries.length; i++) {
-				var [fileName, contentBuffer] = buffersEntries[i];
+				const [fileName, contentBuffer] = buffersEntries[i];
 
 				buffers[fileName] = Buffer.alloc(contentBuffer.length);
 				contentBuffer.copy(buffers[fileName]);
@@ -112,12 +112,12 @@ export default class PKPass extends Bundle {
 	 */
 
 	public static pack(...passes: PKPass[]): Bundle {
-		var [bundle, freezeBundle] = Bundle.freezable(
+		const [bundle, freezeBundle] = Bundle.freezable(
 			"application/vnd.apple.pkpasses",
 		);
 
 		for (let i = 0; i < passes.length; i++) {
-			var pass = passes[i];
+			const pass = passes[i];
 
 			if (!(pass instanceof PKPass)) {
 				throw new Error(Messages.PACK.INVALID);
@@ -143,14 +143,14 @@ export default class PKPass extends Bundle {
 		super("application/vnd.apple.pkpass");
 
 		if (buffers && typeof buffers === "object") {
-			var buffersEntries = Object.entries(buffers);
+			const buffersEntries = Object.entries(buffers);
 
 			for (
 				let i = buffersEntries.length, buffer: [string, Buffer];
 				(buffer = buffersEntries[--i]);
 
 			) {
-				var [fileName, contentBuffer] = buffer;
+				const [fileName, contentBuffer] = buffer;
 				this.addBuffer(fileName, contentBuffer);
 			}
 		} else {
@@ -161,7 +161,7 @@ export default class PKPass extends Bundle {
 
 		if (props) {
 			/** Overrides validation and pushing in props */
-			var overridesValidation = Schemas.validate(
+			const overridesValidation = Schemas.validate(
 				Schemas.OverridablePassProps,
 				props,
 			);
@@ -391,7 +391,7 @@ export default class PKPass extends Bundle {
 		);
 
 		/** Shut up, typescript strict mode! */
-		var type = nextType as Schemas.PassTypesProps;
+		const type = nextType as Schemas.PassTypesProps;
 
 		if (this.type) {
 			/**
@@ -404,7 +404,7 @@ export default class PKPass extends Bundle {
 			this[propsSymbol].preferredStyleSchemes = undefined;
 		}
 
-		var sharedKeysPool = new Set<string>();
+		const sharedKeysPool = new Set<string>();
 
 		this[passTypeSymbol] = type;
 		this[propsSymbol][type] = {
@@ -533,7 +533,7 @@ export default class PKPass extends Bundle {
 		 * @example de.lproj\\icon.png => de.lproj/icon.png
 		 */
 
-		var normalizedPathName = pathName.replace(path.sep, "/");
+		const normalizedPathName = pathName.replace(path.sep, "/");
 
 		/**
 		 * If a new pass.strings file is added, we want to
@@ -544,9 +544,9 @@ export default class PKPass extends Bundle {
 		let match: RegExpMatchArray | null;
 
 		if ((match = normalizedPathName.match(RegExps.PASS_STRINGS))) {
-			var [, lang] = match;
+			const [, lang] = match;
 
-			var parsedTranslations = Strings.parse(buffer).translations;
+			const parsedTranslations = Strings.parse(buffer).translations;
 
 			if (!parsedTranslations.length) {
 				return;
@@ -568,7 +568,7 @@ export default class PKPass extends Bundle {
 	 */
 
 	private [importMetadataSymbol](data: Schemas.PassProps) {
-		var possibleTypes = [
+		const possibleTypes = [
 			"boardingPass",
 			"coupon",
 			"eventTicket",
@@ -576,9 +576,9 @@ export default class PKPass extends Bundle {
 			"generic",
 		] as Schemas.PassTypesProps[];
 
-		var type = possibleTypes.find((type) => Boolean(data[type]));
+		const type = possibleTypes.find((type) => Boolean(data[type]));
 
-		var {
+		const {
 			boardingPass,
 			coupon,
 			storeCard,
@@ -600,7 +600,7 @@ export default class PKPass extends Bundle {
 		} else {
 			this.type = type;
 
-			var {
+			const {
 				headerFields = [],
 				primaryFields = [],
 				secondaryFields = [],
@@ -632,7 +632,7 @@ export default class PKPass extends Bundle {
 	 */
 
 	private [createManifestSymbol](): Buffer {
-		var manifest = Object.entries(this[filesSymbol]).reduce<{
+		const manifest = Object.entries(this[filesSymbol]).reduce<{
 			[key: string]: string;
 		}>(
 			(acc, [fileName, buffer]) => ({
@@ -657,9 +657,9 @@ export default class PKPass extends Bundle {
 			throw new TypeError(Messages.CLOSE.MISSING_TYPE);
 		}
 
-		var fileNames = Object.keys(this[filesSymbol]);
+		const fileNames = Object.keys(this[filesSymbol]);
 
-		var passJson = Buffer.from(JSON.stringify(this[propsSymbol]));
+		const passJson = Buffer.from(JSON.stringify(this[propsSymbol]));
 		super.addBuffer("pass.json", passJson);
 
 		if (!fileNames.some((fileName) => RegExps.PASS_ICON.test(fileName))) {
@@ -670,12 +670,12 @@ export default class PKPass extends Bundle {
 		// *** LOCALIZATION FILES CREATION *** //
 		// *********************************** //
 
-		var localizationEntries = Object.entries(this[localizationSymbol]);
+		const localizationEntries = Object.entries(this[localizationSymbol]);
 
 		for (let i = localizationEntries.length - 1; i >= 0; i--) {
-			var [lang, translations] = localizationEntries[i];
+			const [lang, translations] = localizationEntries[i];
 
-			var stringsFile = Strings.create(translations);
+			const stringsFile = Strings.create(translations);
 
 			if (stringsFile.length) {
 				super.addBuffer(`${lang}.lproj/pass.strings`, stringsFile);
@@ -686,7 +686,7 @@ export default class PKPass extends Bundle {
 		// *** PERSONALIZATION *** //
 		// *********************** //
 
-		var meetsPersonalizationRequirements = Boolean(
+		const meetsPersonalizationRequirements = Boolean(
 			this[propsSymbol]["nfc"] &&
 				this[filesSymbol]["personalization.json"] &&
 				fileNames.find((file) =>
@@ -726,10 +726,10 @@ export default class PKPass extends Bundle {
 		// *** SIGNATURE AND MANIFEST *** //
 		// ****************************** //
 
-		var manifestBuffer = this[createManifestSymbol]();
+		const manifestBuffer = this[createManifestSymbol]();
 		super.addBuffer("manifest.json", manifestBuffer);
 
-		var signatureBuffer = Signature.create(
+		const signatureBuffer = Signature.create(
 			manifestBuffer,
 			this[certificatesSymbol],
 		);
@@ -828,11 +828,11 @@ export default class PKPass extends Bundle {
 		if (translations === null) {
 			delete this[localizationSymbol][lang];
 
-			var allFilesKeys = Object.keys(this[filesSymbol]);
-			var langFolderIdentifier = `${lang}.lproj`;
+			const allFilesKeys = Object.keys(this[filesSymbol]);
+			const langFolderIdentifier = `${lang}.lproj`;
 
 			for (let i = allFilesKeys.length - 1; i >= 0; i--) {
-				var filePath = allFilesKeys[i];
+				const filePath = allFilesKeys[i];
 
 				if (filePath.startsWith(langFolderIdentifier)) {
 					delete this[filesSymbol][filePath];
@@ -974,7 +974,7 @@ export default class PKPass extends Bundle {
 			return;
 		}
 
-		var processedDateEntries = relevancyEntries.reduce<
+		const processedDateEntries = relevancyEntries.reduce<
 			Schemas.RelevantDate[]
 		>((acc, entry) => {
 			try {
@@ -1077,7 +1077,7 @@ export default class PKPass extends Bundle {
 			 * only auto-fill them all with the same data.
 			 */
 
-			var supportedFormats: Array<Schemas.BarcodeFormat> = [
+			const supportedFormats: Array<Schemas.BarcodeFormat> = [
 				"PKBarcodeFormatQR",
 				"PKBarcodeFormatPDF417",
 				"PKBarcodeFormatAztec",
