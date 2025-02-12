@@ -16,7 +16,7 @@ export interface CurrencyAmount {
 	amount?: string;
 }
 
-export const CurrencyAmount = Joi.object<CurrencyAmount>().keys({
+export let CurrencyAmount = Joi.object<CurrencyAmount>().keys({
 	currencyCode: Joi.string(),
 	amount: Joi.string(),
 });
@@ -34,7 +34,7 @@ export interface EventDateInfo {
 	timeZone?: string;
 }
 
-export const EventDateInfo = Joi.object<EventDateInfo>().keys({
+export let EventDateInfo = Joi.object<EventDateInfo>().keys({
 	date: Joi.string().isoDate().required(),
 	ignoreTimeComponents: Joi.boolean(),
 	timeZone: Joi.string(),
@@ -48,7 +48,7 @@ export interface Location {
 	longitude: number;
 }
 
-export const Location = Joi.object<Location>().keys({
+export let Location = Joi.object<Location>().keys({
 	latitude: Joi.number().required(),
 	longitude: Joi.number().required(),
 });
@@ -66,7 +66,7 @@ export interface PersonNameComponents {
 	phoneticRepresentation?: string;
 }
 
-export const PersonNameComponents = Joi.object<PersonNameComponents>().keys({
+export let PersonNameComponents = Joi.object<PersonNameComponents>().keys({
 	givenName: Joi.string(),
 	familyName: Joi.string(),
 	middleName: Joi.string(),
@@ -106,7 +106,7 @@ export interface Seat {
 	seatSectionColor?: string;
 }
 
-export const Seat = Joi.object<Seat>().keys({
+export let Seat = Joi.object<Seat>().keys({
 	seatSection: Joi.string(),
 	seatRow: Joi.string(),
 	seatNumber: Joi.string(),
@@ -141,7 +141,7 @@ export interface WifiNetwork {
 	ssid: string;
 }
 
-export const WifiNetwork = Joi.object<WifiNetwork>().keys({
+export let WifiNetwork = Joi.object<WifiNetwork>().keys({
 	password: Joi.string().required(),
 	ssid: Joi.string().required(),
 });
