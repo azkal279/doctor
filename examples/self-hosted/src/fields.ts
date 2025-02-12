@@ -15,15 +15,15 @@ import { app } from "./webserver.js";
 import { getCertificates } from "./shared.js";
 
 app.route("/fields/:modelName").get(async (request, response) => {
-	let passName =
+	const passName =
 		"exampleBooking" +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
-	let certificates = await getCertificates();
+	const certificates = await getCertificates();
 
 	try {
-		let pass = await PKPass.from(
+		const pass = await PKPass.from(
 			{
 				model: path.resolve(__dirname, "../../models/exampleBooking"),
 				certificates: {
@@ -179,7 +179,7 @@ app.route("/fields/:modelName").get(async (request, response) => {
 			},
 		);
 
-		let stream = pass.getAsStream();
+		const stream = pass.getAsStream();
 
 		response.set({
 			"Content-type": pass.mimeType,
