@@ -1,4 +1,4 @@
 declare module "*.png" {
-	const content: Buffer;
+	let content: Buffer;
 	export default content;
 }
