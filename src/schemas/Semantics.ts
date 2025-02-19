@@ -272,7 +272,7 @@ export interface Semantics {
 	wifiAccess?: SemanticTagType.WifiNetwork[];
 }
 
-export const Semantics = Joi.object<Semantics>().keys({
+export let Semantics = Joi.object<Semantics>().keys({
 	/**
 	 * @iOSVersion 18
 	 * @passStyle eventTicket (new layout)
