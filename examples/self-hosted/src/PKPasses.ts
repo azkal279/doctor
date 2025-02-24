@@ -44,7 +44,7 @@ function getRandomColorPart() {
 }
 
 async function generatePass(props: Object) {
-	const [iconFromModel, certificates] = await Promise.all([
+	let [iconFromModel, certificates] = await Promise.all([
 		fs.readFile(
 			path.resolve(
 				__dirname,
@@ -54,7 +54,7 @@ async function generatePass(props: Object) {
 		getCertificates(),
 	]);
 
-	const pass = new PKPass(
+	let pass = new PKPass(
 		{},
 		{
 			wwdr: certificates.wwdr,
@@ -120,27 +120,27 @@ async function generatePass(props: Object) {
 }
 
 app.route("/pkpasses/:modelName").get(async (request, response) => {
-	const passName =
+	let passName =
 		request.params.modelName +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
 	try {
-		const passes = await Promise.all([
+		let passes = await Promise.all([
 			generatePass(request.body || request.params || request.query),
 			generatePass(request.body || request.params || request.query),
 			generatePass(request.body || request.params || request.query),
 			generatePass(request.body || request.params || request.query),
 		]);
 
-		const pkpasses = PKPass.pack(...passes);
+		let pkpasses = PKPass.pack(...passes);
 
 		response.set({
 			"Content-type": pkpasses.mimeType,
 			"Content-disposition": `attachment; filename=${passName}.pkpasses`,
 		});
 
-		const stream = pkpasses.getAsStream();
+		let stream = pkpasses.getAsStream();
 
 		stream.pipe(response);
 	} catch (err) {
