@@ -10,15 +10,15 @@ import { app } from "./webserver.js";
 import { getCertificates } from "./shared.js";
 
 app.route("/localize/:modelName").get(async (request, response) => {
-	const passName =
+	let passName =
 		request.params.modelName +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
-	const certificates = await getCertificates();
+	let certificates = await getCertificates();
 
 	try {
-		const pass = await PKPass.from(
+		let pass = await PKPass.from(
 			{
 				model: path.resolve(
 					__dirname,
@@ -56,7 +56,7 @@ app.route("/localize/:modelName").get(async (request, response) => {
 			pass.transitType = "PKTransitTypeAir";
 		}
 
-		const stream = pass.getAsStream();
+		let stream = pass.getAsStream();
 
 		response.set({
 			"Content-type": pass.mimeType,
