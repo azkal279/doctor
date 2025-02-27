@@ -20,15 +20,15 @@ app.route("/expirationDate/:modelName").get(async (request, response) => {
 		return;
 	}
 
-	const certificates = await getCertificates();
+	let certificates = await getCertificates();
 
-	const passName =
+	let passName =
 		request.params.modelName +
 		"_" +
 		new Date().toISOString().split("T")[0].replace(/-/gi, "");
 
 	try {
-		const pass = await PKPass.from(
+		let pass = await PKPass.from(
 			{
 				model: path.resolve(
 					__dirname,
@@ -51,7 +51,7 @@ app.route("/expirationDate/:modelName").get(async (request, response) => {
 
 		if (request.query.fn === "expiration") {
 			// 2 minutes later...
-			const d = new Date();
+			let d = new Date();
 			d.setMinutes(d.getMinutes() + 2);
 
 			// setting the expiration
@@ -67,7 +67,7 @@ app.route("/expirationDate/:modelName").get(async (request, response) => {
 			pass.transitType = "PKTransitTypeAir";
 		}
 
-		const stream = pass.getAsStream();
+		let stream = pass.getAsStream();
 
 		response.set({
 			"Content-type": pass.mimeType,
