@@ -64,9 +64,9 @@ initializeApp({
 	storageBucket: startData.FIREBASE_BUCKET_ADDR,
 });
 
-var storageRef = getStorage().bucket();
+const storageRef = getStorage().bucket();
 
-export var pass = functions.onRequest(
+export const pass = functions.onRequest(
 	async (request: RequestWithBody, response) => {
 		let modelBasePath: string;
 
@@ -108,7 +108,7 @@ export var pass = functions.onRequest(
 				);
 			}
 
-			var newPass = await PKPass.from(
+			const newPass = await PKPass.from(
 				{
 					/**
 					 * Get relevant pass model from model folder (see passkit-generator/examples/models/)
@@ -166,7 +166,7 @@ export var pass = functions.onRequest(
 
 			if (Array.isArray(request.body.header)) {
 				for (let i = 0; i < request.body.header.length; i++) {
-					var field = request.body.header[i];
+					const field = request.body.header[i];
 
 					if (!(field?.label && field.value)) {
 						continue;
@@ -182,7 +182,7 @@ export var pass = functions.onRequest(
 
 			if (Array.isArray(request.body.primary)) {
 				for (let i = 0; i < request.body.primary.length; i++) {
-					var field = request.body.primary[i];
+					const field = request.body.primary[i];
 
 					if (!(field?.label && field.value)) {
 						continue;
@@ -201,13 +201,13 @@ export var pass = functions.onRequest(
 
 			if (Array.isArray(request.body.secondary)) {
 				for (let i = 0; i < request.body.secondary.length; i++) {
-					var field = request.body.secondary[i];
+					const field = request.body.secondary[i];
 
 					if (!(field?.label && field.value)) {
 						continue;
 					}
 
-					var isElementInLastTwoPositions =
+					const isElementInLastTwoPositions =
 						i === request.body.secondary.length - 2 ||
 						i === request.body.secondary.length - 1;
 
@@ -224,13 +224,13 @@ export var pass = functions.onRequest(
 
 			if (Array.isArray(request.body.auxiliary)) {
 				for (let i = 0; i < request.body.auxiliary.length; i++) {
-					var field = request.body.auxiliary[i];
+					const field = request.body.auxiliary[i];
 
 					if (!(field?.label && field.value)) {
 						continue;
 					}
 
-					var isElementInLastTwoPositions =
+					const isElementInLastTwoPositions =
 						i === request.body.auxiliary.length - 2 ||
 						i === request.body.auxiliary.length - 1;
 
@@ -254,19 +254,19 @@ export var pass = functions.onRequest(
 				});
 			}
 
-			var { thumbnailFile, logoFile } = request.body;
+			const { thumbnailFile, logoFile } = request.body;
 
 			// Downloading thumbnail and logo files from Firebase Storage and adding to pass
 			if (newPass.type == "generic" || newPass.type == "eventTicket") {
 				if (thumbnailFile) {
-					var tempPath1 = path.join(os.tmpdir(), thumbnailFile);
+					const tempPath1 = path.join(os.tmpdir(), thumbnailFile);
 
 					try {
 						await storageRef
 							.file(`thumbnails/${thumbnailFile}`)
 							.download({ destination: tempPath1 });
 
-						var buffer = fs.readFileSync(tempPath1);
+						const buffer = fs.readFileSync(tempPath1);
 
 						newPass.addBuffer("thumbnail.png", buffer);
 						newPass.addBuffer("thumbnail@2x.png", buffer);
@@ -277,14 +277,14 @@ export var pass = functions.onRequest(
 			}
 
 			if (logoFile) {
-				var tempPath2 = path.join(os.tmpdir(), logoFile);
+				const tempPath2 = path.join(os.tmpdir(), logoFile);
 
 				try {
 					await storageRef
 						.file(`logos/${logoFile}`)
 						.download({ destination: tempPath2 });
 
-					var buffer = fs.readFileSync(tempPath2);
+					const buffer = fs.readFileSync(tempPath2);
 
 					newPass.addBuffer("logo.png", buffer);
 					newPass.addBuffer("logo@2x.png", buffer);
@@ -293,14 +293,14 @@ export var pass = functions.onRequest(
 				}
 			}
 
-			var bufferData = newPass.getAsBuffer();
+			const bufferData = newPass.getAsBuffer();
 
 			response.set("Content-Type", newPass.mimeType);
 			response.status(200).send(bufferData);
 		} catch (error) {
 			console.log("Error Uploading pass " + error);
 
-			var err = Object.assign(
+			const err = Object.assign(
 				{},
 				...Object.entries(Object.getOwnPropertyDescriptors(error)).map(
 					([key, descriptor]) => {
