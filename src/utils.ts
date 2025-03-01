@@ -38,11 +38,11 @@ export function removeHidden(from: Array<string>): Array<string> {
  */
 
 export function cloneRecursive<T extends Object>(object: T) {
-	var objectCopy = {} as Record<keyof T, any>;
-	var objectEntries = Object.entries(object) as [keyof T, T[keyof T]][];
+	const objectCopy = {} as Record<keyof T, any>;
+	const objectEntries = Object.entries(object) as [keyof T, T[keyof T]][];
 
 	for (let i = 0; i < objectEntries.length; i++) {
-		var [key, value] = objectEntries[i];
+		const [key, value] = objectEntries[i];
 
 		if (value && typeof value === "object") {
 			if (Array.isArray(value)) {
