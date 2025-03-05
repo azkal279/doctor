@@ -51,7 +51,7 @@ export async function pkpasses(event: ALBEvent) {
 		return err;
 	}
 
-	let [certificates, iconFromModel, s3] = await Promise.all([
+	const [certificates, iconFromModel, s3] = await Promise.all([
 		getCertificates(),
 		getSpecificFileInModel(
 			"icon.png",
@@ -61,7 +61,7 @@ export async function pkpasses(event: ALBEvent) {
 	]);
 
 	function createPass() {
-		let pass = new PKPass({}, certificates, {
+		const pass = new PKPass({}, certificates, {
 			description: "Example Apple Wallet Pass",
 			passTypeIdentifier: "pass.com.passkitgenerator",
 			// Be sure to issue different serialNumbers or you might incur into the bug explained above
@@ -111,24 +111,24 @@ export async function pkpasses(event: ALBEvent) {
 		return pass;
 	}
 
-	let passes = await Promise.all([
+	const passes = await Promise.all([
 		Promise.resolve(createPass()),
 		Promise.resolve(createPass()),
 		Promise.resolve(createPass()),
 		Promise.resolve(createPass()),
 	]);
 
-	let pkpasses = PKPass.pack(...passes);
+	const pkpasses = PKPass.pack(...passes);
 
 	/**
 	 * Although the other passes are served as files, in this example
 	 * we are uploading on s3 (local) just see how it works.
 	 */
 
-	let buffer = pkpasses.getAsBuffer();
-	let passName = `GeneratedPass-${Math.random()}.pkpasses`;
+	const buffer = pkpasses.getAsBuffer();
+	const passName = `GeneratedPass-${Math.random()}.pkpasses`;
 
-	let { Location } = await s3
+	const { Location } = await s3
 		.upload({
 			Bucket: config.PASSES_S3_TEMP_BUCKET,
 			Key: passName,
