@@ -16,14 +16,14 @@ export async function expirationDate(event: ALBEvent, context: Context) {
 		return err;
 	}
 
-	const { modelName, ...passOptions } = event.queryStringParameters;
+	let { modelName, ...passOptions } = event.queryStringParameters;
 
-	const passGenerator = createPassGenerator(modelName, passOptions);
+	let passGenerator = createPassGenerator(modelName, passOptions);
 
-	const pass = (await passGenerator.next()).value as PKPass;
+	let pass = (await passGenerator.next()).value as PKPass;
 
 	// 2 minutes later...
-	const d = new Date();
+	let d = new Date();
 	d.setMinutes(d.getMinutes() + 2);
 
 	// setting the expiration
