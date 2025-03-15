@@ -11,7 +11,7 @@ import {
  */
 
 export async function scratch(event: ALBEvent) {
-	let passGenerator = createPassGenerator(undefined, {
+	const passGenerator = createPassGenerator(undefined, {
 		description: "Example Apple Wallet Pass",
 		passTypeIdentifier: "pass.com.passkitgenerator",
 		serialNumber: "nmyuxofgna",
@@ -22,7 +22,7 @@ export async function scratch(event: ALBEvent) {
 		backgroundColor: `rgb(${getRandomColorPart()}, ${getRandomColorPart()}, ${getRandomColorPart()})`,
 	});
 
-	let [{ value }, iconFromModel] = await Promise.all([
+	const [{ value }, iconFromModel] = await Promise.all([
 		passGenerator.next(),
 		getSpecificFileInModel(
 			"icon.png",
@@ -30,7 +30,7 @@ export async function scratch(event: ALBEvent) {
 		),
 	]);
 
-	let pass = value as PKPass;
+	const pass = value as PKPass;
 
 	pass.type = "boardingPass";
 	pass.transitType = "PKTransitTypeAir";
