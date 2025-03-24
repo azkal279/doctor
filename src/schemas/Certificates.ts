@@ -13,11 +13,11 @@ export interface CertificatesSchema {
  * so we fallback to manual checking. Buffer must be polyfilled.
  */
 
-const binary = Joi.binary
+let binary = Joi.binary
 	? Joi.binary()
 	: Joi.custom((obj) => Buffer.isBuffer(obj));
 
-export const CertificatesSchema = Joi.object<CertificatesSchema>()
+export let CertificatesSchema = Joi.object<CertificatesSchema>()
 	.keys({
 		wwdr: Joi.alternatives(binary, Joi.string()).required(),
 		signerCert: Joi.alternatives(binary, Joi.string()).required(),
