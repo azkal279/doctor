@@ -17,7 +17,7 @@ export interface Barcode {
 	message: string;
 }
 
-export const Barcode = Joi.object<Barcode>().keys({
+export let Barcode = Joi.object<Barcode>().keys({
 	altText: Joi.string(),
 	messageEncoding: Joi.string().default("iso-8859-1"),
 	format: Joi.string()
