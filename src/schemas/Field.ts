@@ -51,7 +51,7 @@ export interface FieldWithRow extends Field {
 	row?: 0 | 1;
 }
 
-export let Field = Joi.object<Field>().keys({
+export const Field = Joi.object<Field>().keys({
 	attributedValue: Joi.alternatives(
 		Joi.string().allow(""),
 		Joi.number(),
@@ -102,7 +102,7 @@ export let Field = Joi.object<Field>().keys({
 		}),
 });
 
-export let FieldWithRow = Field.concat(
+export const FieldWithRow = Field.concat(
 	Joi.object<FieldWithRow>().keys({
 		row: Joi.number().min(0).max(1),
 	}),
