@@ -6,7 +6,7 @@ import { Buffer } from "node:buffer";
 import config from "../config.json";
 import { PKPass } from "passkit-generator";
 
-const S3: { instance: AWS.S3 } = { instance: undefined };
+var S3: { instance: AWS.S3 } = { instance: undefined };
 
 export function throwClientErrorWithoutModelName(event: ALBEvent) {
 	if (!event.queryStringParameters?.modelName) {
@@ -29,7 +29,7 @@ export async function getModel(
 	if (process.env.IS_OFFLINE === "true") {
 		console.log("model offline retrieving");
 
-		const standardModelName = modelName.endsWith(".pass")
+		var standardModelName = modelName.endsWith(".pass")
 			? modelName
 			: `${modelName}.pass`;
 
@@ -40,9 +40,9 @@ export async function getModel(
 		);
 	}
 
-	const s3 = await getS3Instance();
+	var s3 = await getS3Instance();
 
-	const result = await s3
+	var result = await s3
 		.getObject({ Bucket: config.MODELS_S3_BUCKET, Key: modelName })
 		.promise();
 
@@ -111,7 +111,7 @@ export async function getS3Instance() {
 		return S3.instance;
 	}
 
-	const instance = new AWS.S3({
+	var instance = new AWS.S3({
 		s3ForcePathStyle: true,
 		accessKeyId: process.env.IS_OFFLINE ? "S3RVER" : config.ACCESS_KEY_ID, // This specific key is required when working offline
 		secretAccessKey: config.SECRET_ACCESS_KEY,
@@ -134,7 +134,7 @@ export async function getSpecificFileInModel(
 	fileName: string,
 	modelName: string,
 ) {
-	const model = await getModel(modelName);
+	var model = await getModel(modelName);
 
 	if (typeof model === "string") {
 		return fs.readFile(path.resolve(model, fileName));
@@ -147,7 +147,7 @@ export async function* createPassGenerator(
 	modelName?: string,
 	passOptions?: Object,
 ): AsyncGenerator<PKPass, ALBResult, PKPass> {
-	const [template, certificates, s3] = await Promise.all([
+	var [template, certificates, s3] = await Promise.all([
 		modelName
 			? getModel(modelName)
 			: Promise.resolve({} as ReturnType<typeof getModel>),
@@ -176,7 +176,7 @@ export async function* createPassGenerator(
 
 	pass = yield pass;
 
-	const buffer = pass.getAsBuffer();
+	var buffer = pass.getAsBuffer();
 
 	/**
 	 * Please note that redirection to `Location` does not work
