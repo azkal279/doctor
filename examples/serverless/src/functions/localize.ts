@@ -16,11 +16,11 @@ export async function localize(event: ALBEvent) {
 		return err;
 	}
 
-	const { modelName, ...passOptions } = event.queryStringParameters;
+	let { modelName, ...passOptions } = event.queryStringParameters;
 
-	const passGenerator = createPassGenerator(modelName, passOptions);
+	let passGenerator = createPassGenerator(modelName, passOptions);
 
-	const pass = (await passGenerator.next()).value as PKPass;
+	let pass = (await passGenerator.next()).value as PKPass;
 
 	/**
 	 * Italian and German already has an .lproj which gets included
