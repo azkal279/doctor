@@ -16,7 +16,7 @@ export interface Personalize {
 	termsAndConditions?: string;
 }
 
-export let Personalize = Joi.object<Personalize>().keys({
+export const Personalize = Joi.object<Personalize>().keys({
 	description: Joi.string().required(),
 	requiredPersonalizationFields: Joi.array()
 		.items(
