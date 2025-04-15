@@ -10,7 +10,7 @@ import { Buffer } from "node:buffer";
  */
 
 export function createHash(buffer: Buffer) {
-	const hashFlow = forge.md.sha1.create();
+	let hashFlow = forge.md.sha1.create();
 	hashFlow.update(buffer.toString("binary"));
 
 	return hashFlow.digest().toHex();
@@ -29,11 +29,11 @@ export function create(
 	manifestBuffer: Buffer,
 	certificates: Schemas.CertificatesSchema,
 ): Buffer {
-	const signature = forge.pkcs7.createSignedData();
+	let signature = forge.pkcs7.createSignedData();
 
 	signature.content = new forge.util.ByteStringBuffer(manifestBuffer);
 
-	const { wwdr, signerCert, signerKey } = parseCertificates(
+	let { wwdr, signerCert, signerKey } = parseCertificates(
 		getStringCertificates(certificates),
 	);
 
@@ -103,7 +103,7 @@ export function create(
  */
 
 function parseCertificates(certificates: Schemas.CertificatesSchema) {
-	const { signerCert, signerKey, wwdr, signerKeyPassphrase } = certificates;
+	let { signerCert, signerKey, wwdr, signerKeyPassphrase } = certificates;
 
 	return {
 		signerCert: forge.pki.certificateFromPem(signerCert.toString("utf-8")),
