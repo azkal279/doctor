@@ -1,0 +1,13 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"declarationDir": "lib/types",
+		"outDir": "lib/esm",
+		"inlineSourceMap": true,
+		"skipLibCheck": true,
+		"module": "Node16",
+		"moduleResolution": "Node16"
+	},
+	"include": ["src/**/*"]
+}

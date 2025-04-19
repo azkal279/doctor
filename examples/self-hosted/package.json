@@ -1,0 +1,29 @@
+{
+	"name": "examples-self-hosted",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Passkit-generator self-hosted examples",
+	"author": "Alexander P. Cerutti <cerutti.alexander@gmail.com>",
+	"license": "ISC",
+	"type": "module",
+	"scripts": {
+		"clear:deps": "rm -rf node_modules",
+		"example": "pnpm tsx src/index.ts",
+		"example:debug": "pnpm tsx --inspect-brk src/index.ts"
+	},
+	"peerDependencies": {
+		"passkit-generator": "workspace:*"
+	},
+	"dependencies": {
+		"express": "^5.0.1",
+		"node-fetch": "^3.2.3",
+		"passkit-generator": "workspace:*",
+		"tslib": "^2.7.0"
+	},
+	"devDependencies": {
+		"@types/express": "5.0.0",
+		"@types/express-serve-static-core": "^5.0.4",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.3"
+	}
+}

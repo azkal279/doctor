@@ -1,0 +1,13 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"declarationDir": "lib/types",
+		"outDir": "lib/cjs",
+		"inlineSourceMap": true,
+		"skipLibCheck": true,
+		"module": "CommonJS",
+		"moduleResolution": "Node10"
+	},
+	"include": ["src/**/*"]
+}

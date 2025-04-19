@@ -1,0 +1,9 @@
+{
+	"editor.tabSize": 4,
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"editor.smoothScrolling": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+
+	"jest.jestCommandLine": "NODE_OPTIONS=\"--warnings\" pnpm jest -c jest.config.cjs --runInBand --silent"
+}

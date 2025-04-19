@@ -1,0 +1,34 @@
+on:
+    push:
+        branches:
+            - master
+
+    pull_request:
+        types: [opened, edited]
+        branches:
+            - master
+
+    workflow_dispatch:
+
+jobs:
+    test-on-ubuntu:
+        name: Testing Workflow Linux
+        runs-on: ubuntu-latest
+        env:
+            SIGNER_CERT: ${{ secrets.SIGNER_CERT }}
+            SIGNER_KEY: ${{ secrets.SIGNER_KEY }}
+            WWDR: ${{ secrets.WWDR }}
+            SIGNER_KEY_PASSPHRASE: ${{ secrets.SIGNER_KEY_PASSPHRASE }}
+        steps:
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: "20.x"
+                  check-latest: true
+            - run: |
+                  pnpm install
+                  pnpm build
+                  pnpm test
